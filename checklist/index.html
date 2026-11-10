@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231E5A44'/%3E%3Cpath d='M7 12h12M10 17h15M7 22h10M20 22h5' stroke='white' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>Leading Through the Fog Checklist</title>
+<meta name="description" content="Ten practices for leading when the way ahead isn't clear. See how clear your view is.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the fog photo fills the screen and reacts to every answer; a frosted card on the left
+   carries the quiz, leaving the clock tower visible on the right. Single committed "misty morning" look. */
+:root{
+  --mist:#EDF1EF;        /* fog-white with a green-blue bias */
+  --mist-rgb:237 241 239;
+  --glass-rgb:247 249 248;
+  --ink:#1B2A28;         /* deep slate-evergreen */
+  --ink-soft:#4C5D5A;
+  --line:#C6D1CE;
+  --evergreen:#1E5A44;   /* accent: the green of the Dartmouth trees */
+  --evergreen-soft:#DCE9E3;
+  --amber:#B8661F;       /* the autumn maples: used only where fog lingers */
+  --amber-soft:#F5E6D6;
+  --display:"Newsreader", "Iowan Old Style", Georgia, serif;
+  --body:"Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --fog:0.64;
+  color-scheme:light;
+}
+html{background:var(--mist)}
+body{background:var(--mist);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--evergreen);outline-offset:3px}
+[tabindex="-1"]:focus{outline:none}
+
+/* ---------- the scene ---------- */
+.scene{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--mist)}
+.photo{position:absolute;inset:0;transform:scale(1.05);background:url("fog.jpg") 4% 42%/cover no-repeat;
+  filter:blur(calc(var(--fog) * 7.5px)) saturate(calc(1.5 - var(--fog) * 1.1)) contrast(calc(1.32 - var(--fog) * 0.46)) brightness(calc(0.95 + var(--fog) * 0.14));
+  transition:filter 1.8s ease}
+.veil{position:absolute;inset:0;background:linear-gradient(180deg,rgb(var(--mist-rgb)/.95) 0%,rgb(var(--mist-rgb)/.6) 55%,rgb(var(--mist-rgb)/.85) 100%);
+  opacity:min(0.9, calc(var(--fog) * 1.25));transition:opacity 1.4s ease}
+#fog{position:absolute;inset:0;width:100%;height:100%}
+
+/* visibility instrument */
+.instrument{position:fixed;z-index:2;right:max(20px,calc(env(safe-area-inset-right,0px) + 20px));bottom:calc(env(safe-area-inset-bottom,0px) + 20px);
+  display:flex;align-items:center;gap:14px;padding:10px 16px 10px 14px;border-radius:12px;
+  background:rgb(var(--glass-rgb)/.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgb(255 255 255/.7);
+  font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--ink-soft)}
+.instrument .code{font-weight:500;color:var(--ink);padding:3px 7px;border:1px solid var(--line);border-radius:6px;min-width:3.4em;text-align:center}
+.instrument .vis b{display:block;font-family:var(--display);font-size:22px;font-weight:500;letter-spacing:0;color:var(--ink);line-height:1.1;font-variant-numeric:tabular-nums}
+.instrument .vis span{text-transform:uppercase;font-size:10.5px}
+
+/* ---------- page ---------- */
+.page{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;gap:22px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 110px}
+.inner{width:100%;max-width:1240px;margin-inline:auto;display:flex;flex-direction:column;gap:22px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:var(--display);font-size:19px;font-weight:500;width:max-content;max-width:100%}
+.brand svg{flex:none}
+.brand em{font-style:italic;font-weight:400}
+
+.card{width:min(560px,100%);background:rgb(var(--glass-rgb)/.86);backdrop-filter:blur(18px) saturate(1.1);-webkit-backdrop-filter:blur(18px) saturate(1.1);
+  border:1px solid rgb(255 255 255/.75);border-radius:20px;padding:clamp(22px,4vw,38px);
+  box-shadow:0 30px 70px -40px rgb(27 42 40/.55)}
+.screen{display:flex;flex-direction:column;gap:20px}
+.screen.enter{animation:rise .5s ease both}
+@keyframes rise{from{opacity:.001;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin:0;display:flex;align-items:center;gap:8px}
+h1,h2{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(34px,5.4vw,50px);line-height:1.04}
+h1 em,h2 em{font-style:italic}
+h2{font-size:clamp(26px,3.6vw,34px);line-height:1.12}
+h3{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin:0}
+p{margin:0}
+.lede{font-size:17px;color:var(--ink-soft);max-width:44ch}
+.muted{color:var(--ink-soft);font-size:14px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:999px;cursor:pointer;
+  padding:14px 24px;font-weight:600;font-size:16px;background:var(--evergreen);color:#fff;transition:transform .15s ease,background .2s}
+.btn:hover{background:#174a38;transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{background:rgb(255 255 255/.6)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* icon strip on intro */
+.strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.strip span{height:58px;display:grid;place-items:center;border-radius:12px;background:rgb(255 255 255/.55);border:1px solid rgb(255 255 255/.8);color:var(--evergreen)}
+.strip svg{width:26px;height:26px}
+
+/* progress */
+.progress{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:5px}
+.progress button{aspect-ratio:1;max-width:100%;display:grid;place-items:center;border-radius:9px;border:1px solid var(--line);background:rgb(255 255 255/.4);color:var(--ink-soft);cursor:pointer;padding:0;transition:background .25s,color .25s,border-color .25s}
+.progress button svg{width:62%;height:62%}
+.progress button[disabled]{cursor:default;opacity:.55}
+.progress button.done{background:var(--evergreen-soft);border-color:transparent;color:var(--evergreen)}
+.progress button.current{background:var(--evergreen);border-color:var(--evergreen);color:#fff;opacity:1}
+
+.concept-head{display:flex;gap:16px;align-items:flex-start}
+.concept-icon{flex:none;width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:var(--evergreen);color:#fff}
+.concept-icon svg{width:30px;height:30px}
+.question{font-size:19px;line-height:1.45;color:var(--ink)}
+.question strong{font-weight:600}
+
+.answers{display:flex;flex-direction:column;gap:8px}
+.answer{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:13px 16px;border-radius:12px;cursor:pointer;
+  border:1px solid var(--line);background:rgb(255 255 255/.55);transition:background .2s,border-color .2s,transform .12s}
+.answer:hover{background:#fff;border-color:#9fb3ad}
+.answer:active{transform:scale(.99)}
+.answer .key{flex:none;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-family:var(--mono);font-size:12px;color:var(--ink-soft);border:1px solid var(--line)}
+.answer .label{flex:1;min-width:0;font-weight:500}
+.answer[aria-pressed="true"]{background:var(--evergreen);border-color:var(--evergreen);color:#fff}
+.answer[aria-pressed="true"] .key{border-color:rgb(255 255 255/.5);color:#fff}
+.meter{display:flex;gap:3px;flex:none}
+.meter i{width:14px;height:6px;border-radius:3px;background:var(--line)}
+.meter i.on{background:var(--evergreen)}
+.answer[aria-pressed="true"] .meter i{background:rgb(255 255 255/.3)}
+.answer[aria-pressed="true"] .meter i.on{background:#fff}
+
+.qnav{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.link{background:none;border:0;padding:6px 0;cursor:pointer;color:var(--ink-soft);font-weight:500}
+.link:hover{color:var(--ink)}
+.hint{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.04em}
+
+/* results */
+.score-line{display:flex;flex-wrap:wrap;gap:8px 18px;font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.score-line b{color:var(--ink);font-weight:500}
+.section{display:flex;flex-direction:column;gap:12px;padding-top:22px;border-top:1px solid var(--line)}
+.nudge{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:16px;border-radius:14px;background:rgb(255 255 255/.6);border:1px solid rgb(255 255 255/.9)}
+.nudge .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--amber-soft);color:var(--amber)}
+.nudge.good .ic{background:var(--evergreen-soft);color:var(--evergreen)}
+.nudge .ic svg{width:24px;height:24px}
+.nudge h4{margin:0 0 2px;font-family:var(--display);font-weight:500;font-size:19px;line-height:1.2}
+.nudge .when{font-size:13.5px;color:var(--ink-soft);margin-bottom:8px}
+.nudge .try{font-size:15px}
+.nudge .try b{font-weight:600;color:var(--amber)}
+.list{display:flex;flex-direction:column}
+.item{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid rgb(198 209 206/.6)}
+.item:last-child{border-bottom:0}
+.item svg{width:22px;height:22px;color:var(--evergreen)}
+.item .t{font-weight:500;font-size:15px;line-height:1.3}
+.item .s{font-size:13px;color:var(--ink-soft)}
+.item .meter i{width:12px}
+.item.low .meter i.on{background:var(--amber)}
+.item.low svg{color:var(--amber)}
+.copied{font-size:14px;color:var(--evergreen);font-weight:500}
+textarea.fallback{width:100%;min-height:140px;font-family:var(--mono);font-size:12px;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;color:var(--ink)}
+
+.partner{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.partner .chip{background:#fff;border-radius:12px;padding:6px;display:grid;place-items:center;box-shadow:0 6px 20px -14px rgb(27 42 40/.6)}
+.partner img{width:84px;height:84px;display:block}
+.foot{font-size:13px;color:var(--ink-soft)}
+.foot a{color:var(--ink);text-underline-offset:3px}
+
+@media (min-width:860px){
+  .inner{padding-left:clamp(0px,3vw,48px)}
+}
+@media (max-width:759px){
+  .page{padding-top:max(70px,calc(24vh - 10px))}
+  .photo{background-position:50% 40%}
+  .brand{position:absolute;top:18px;left:max(16px,env(safe-area-inset-left,0px))}
+  .instrument{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);bottom:auto;right:max(14px,env(safe-area-inset-right,0px));padding:7px 10px;gap:10px}
+  .instrument .vis b{font-size:17px}
+  .card{background:rgb(var(--glass-rgb)/.92)}
+  .progress{gap:4px}
+  .progress button{border-radius:7px}
+}
+@media (max-width:420px){
+  .answer{padding:12px 13px;gap:11px}
+  .meter i{width:10px}
+  .concept-icon{width:48px;height:48px}
+}
+@media (prefers-reduced-motion:reduce){
+  .photo,.veil{transition:none}
+  .screen.enter{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="scene" aria-hidden="true">
+  <div class="photo"></div>
+  <canvas id="fog"></canvas>
+  <div class="veil"></div>
+</div>
+
+<div class="instrument" role="status" aria-live="polite">
+  <span class="code" id="wxCode">BR</span>
+  <span class="vis"><span>Visibility</span><b id="visVal">1 mi</b></span>
+</div>
+
+<main class="page">
+  <div class="inner">
+    <a class="brand" id="brand">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 8h11M6 12h15M3 16h9M15 16h4"/></svg>
+      <span>Leading <em>Through the</em> Fog</span>
+    </a>
+    <section class="card" id="card" aria-live="polite"></section>
+  </div>
+</main>
+
+<script>
+/* ============================================================
+   CONFIG: edit this block to reuse the checklist for another client.
+   Set clientLogo to "" to hide the partner logo entirely.
+   ============================================================ */
+const CONFIG = {
+  clientLogo: "client-logo.png",
+  clientName: "Fitch Leadership Lab, in partnership with Tuck Executive Education",
+  /* Keep false until leadingthroughthefog.com has real content: no links to the site appear while false. */
+  siteLive: false,
+  siteUrl: "https://leadingthroughthefog.com",
+  quizUrl: "https://leadingthroughthefog.com/checklist"
+};
+
+const I = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const ICONS = {
+  act:     I('<path d="M5 20v-5M10 20v-9"/><path d="M15 20v-7" stroke-dasharray="1.6 2.4"/><path d="M3.5 9C7 3.5 15 3 20 8"/><path d="M20.4 4.6 20 8l-3.4-.4"/>'),
+  signal:  I('<circle cx="5" cy="19" r="1.3" fill="currentColor"/><path d="M5 14a5 5 0 0 1 5 5"/><path d="M5 9a10 10 0 0 1 10 10"/><path d="M5 4a15 15 0 0 1 15 15" stroke-dasharray="1.6 2.6"/>'),
+  tomorrow:I('<path d="M3 18h18"/><path d="M7 18a5 5 0 0 1 10 0"/><path d="M12 9.5V7M6.6 11.6 5 10M17.4 11.6 19 10M3 21.5h18" /><path d="M12 4 13.5 5.5M12 4l-1.5 1.5"/>'),
+  both:    I('<circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/>'),
+  voice:   I('<path d="M5 4.5h14a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-7.5L7 20.5V17H5a2 2 0 0 1-2-2V6.5a2 2 0 0 1 2-2z" stroke-dasharray="2.2 2.2"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01" stroke-width="2.2"/>'),
+  change:  I('<path d="M19 12a7 7 0 1 1-2.05-4.95"/><path d="M19 4.5V8h-3.5"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/>'),
+  failure: I('<path d="M9.5 18h5M10.5 21h3"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.5 1.1 1.3 1.1 2.1v.1h5v-.1c0-.8.4-1.6 1.1-2.1A6 6 0 0 0 12 3z"/><path d="m11 7.5 2 2.2-1.6 1.6 1.4 1.7"/>'),
+  story:   I('<path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5z"/><path d="M12 6.5v13"/>'),
+  dots:    I('<path d="M5 17 10 8l5 6 5-9"/><circle cx="5" cy="17" r="1.9" fill="currentColor"/><circle cx="10" cy="8" r="1.9" fill="currentColor"/><circle cx="15" cy="14" r="1.9" fill="currentColor"/><circle cx="20" cy="5" r="1.9" fill="currentColor"/>'),
+  risk:    I('<path d="M12 3 19 6v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z"/><path d="m9 12 2.2 2.2L15.5 10"/>')
+};
+
+const PRACTICES = [
+  { icon:"act", concept:"Act when the data tells you not to", practice:"made a call with incomplete data", ask:"made a call with incomplete data",
+    nudge:"Instead of getting more data, design and execute a one-week experiment that creates data." },
+  { icon:"signal", concept:"Amplify weak signals", practice:"spent time exploring the periphery", ask:"spent time exploring the periphery",
+    nudge:"Book 30 minutes with someone at the periphery of your world (a fringe/disgruntled customer, frontline colleague, or an adjacent industry). What surprised you?" },
+  { icon:"tomorrow", concept:"Experience tomorrow today", practice:"played with something new", ask:"played with something new",
+    nudge:"Spend an hour playing with an emergent tool, product, or experience. What was unexpected?" },
+  { icon:"both", concept:"Adopt a both/and mindset", practice:"asked “Is there an alternative?” to an either/or choice", ask:"asked “Is there an alternative?” in response to an either/or choice",
+    nudge:"In your next either/or debate, ask “Is there an alternative?” Push for at least one option that has elements of both." },
+  { icon:"voice", concept:"Hear the voice that isn’t speaking", practice:"held a sparring session to surface assumptions", ask:"held a sparring session to surface assumptions",
+    nudge:"Before your next big decision, ask a colleague to argue the other side for ten minutes, then list the assumptions it exposed." },
+  { icon:"change", concept:"Change to remain unchanged", practice:"connected something new to something old", ask:"connected something new to something old",
+    nudge:"Take one key initiative and name the long-standing value or capability on which it builds. Say it out loud to your team." },
+  { icon:"failure", concept:"Encourage <em>intelligent</em> failure", plain:"Encourage intelligent failure", practice:"publicly celebrated a team or effort that failed", ask:"publicly celebrated a team or effort that failed",
+    nudge:"At your next team meeting, recognize an effort that didn’t work and name exactly what you learned from it." },
+  { icon:"story", concept:"Spark connection through stories", practice:"shared a story that brought strategy to life", ask:"shared a story that created connection by bringing strategy to life",
+    nudge:"Replace one slide of data with a short story about a customer or colleague that shows your strategy in action." },
+  { icon:"dots", concept:"Connect the dots", practice:"connected a short-term activity to a long-term vision", ask:"made a connection between a short-term activity and a long-term vision",
+    nudge:"In your next update, link one task your team is doing this week to where you want to be in three years." },
+  { icon:"risk", concept:"Don’t take risk. Manage it.", practice:"helped a team identify a critical assumption", ask:"helped a team identify a critical assumption",
+    nudge:"Ask your team, “What has to be true for this to work?” Then choose the one assumption you’d test first, and how." }
+];
+
+const ANSWERS = [
+  { label:"Never", score:0 },
+  { label:"Within the last year", score:1 },
+  { label:"Within the last quarter", score:2 },
+  { label:"Within the last month", score:3 },
+  { label:"Within the last week", score:4 }
+];
+
+/* Encouraging cutoffs (out of 40): it doesn't take much to level up. */
+const LEVELS = [
+  { min:0,  name:"The fog thickens", title:"The fog <em>thickens</em>.",
+    msg:"Every leader hits foggy stretches. The good news is that each practice below is a small, repeatable move. Pick one this week and watch the view start to change." },
+  { min:10, name:"The fog lessens", title:"The fog <em>lessens</em>.",
+    msg:"You’re building real visibility. Some of these practices are already part of how you lead. Make one or two more a habit and the way ahead gets much clearer." },
+  { min:22, name:"The fog clears", title:"The fog <em>clears</em>.",
+    msg:"You’re leading through the fog, not waiting for it to lift. Keep the rhythm going, and help your team build the same habits." }
+];
+const levelFor = (t) => [...LEVELS].reverse().find(l => t >= l.min);
+
+/* fog density (0 = clear, 1 = dense) for a total out of 40 */
+function fogFor(total){
+  if (total < 10) return 0.95 - (total/9) * 0.17;          // 0.95 → 0.78
+  if (total < 22) return 0.60 - ((total-10)/11) * 0.25;    // 0.60 → 0.35
+  return 0.22 - ((total-22)/18) * 0.20;                    // 0.22 → 0.02
+}
+function miles(f){ return 0.25 * Math.pow(40, 1 - f); }
+function fmtMiles(m){
+  if (m >= 9) return "10+";
+  if (m < 1){ const q = Math.max(1, Math.round(m*4)); return ({1:"¼",2:"½",3:"¾",4:"1"})[q]; }
+  if (m < 3){ const h = Math.round(m*2)/2; return Math.floor(h) + (h % 1 ? "½" : ""); }
+  return String(Math.round(m));
+}
+function wxCode(f){ return f > 0.74 ? "FG" : f > 0.42 ? "BR" : f > 0.16 ? "HZ" : "CLR"; }
+function wxTitle(f){ return f > 0.74 ? "Fog" : f > 0.42 ? "Mist" : f > 0.16 ? "Haze" : "Clear"; }
+
+/* ---------- fog rendering ---------- */
+const root = document.documentElement;
+const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const cvs = document.getElementById("fog"), ctx = cvs.getContext("2d");
+let fogTarget = 0.64, fogNow = 0.64, W = 0, H = 0;
+const sprite = document.createElement("canvas"); sprite.width = sprite.height = 256;
+(() => { const g = sprite.getContext("2d"), gr = g.createRadialGradient(128,128,0,128,128,128);
+  gr.addColorStop(0,"rgba(246,248,247,0.95)"); gr.addColorStop(0.45,"rgba(246,248,247,0.55)"); gr.addColorStop(1,"rgba(246,248,247,0)");
+  g.fillStyle = gr; g.fillRect(0,0,256,256); })();
+const blobs = Array.from({length:24}, () => ({
+  x: Math.random(), y: 0.25 + Math.random()*0.75, r: 0.22 + Math.random()*0.42,
+  v: (0.006 + Math.random()*0.018) * (Math.random() < .5 ? -1 : 1), a: 0.3 + Math.random()*0.5
+}));
+function resize(){ W = cvs.width = Math.max(1, Math.round(innerWidth/2)); H = cvs.height = Math.max(1, Math.round(innerHeight/2)); }
+resize(); addEventListener("resize", resize);
+let last = performance.now();
+function frame(now){
+  const dt = Math.min(0.1, (now - last)/1000); last = now;
+  fogNow += (fogTarget - fogNow) * Math.min(1, dt * (reduce ? 10 : 1.3));
+  ctx.clearRect(0,0,W,H);
+  ctx.globalAlpha = Math.min(1, fogNow * 0.5); ctx.fillStyle = "rgb(240,243,242)"; ctx.fillRect(0,0,W,H);
+  for (const b of blobs){
+    if (!reduce){ b.x += b.v * dt; if (b.x > 1.4) b.x = -0.4; if (b.x < -0.4) b.x = 1.4; }
+    const r = b.r * Math.max(W, H);
+    ctx.globalAlpha = Math.min(0.85, b.a * fogNow * 1.6);
+    ctx.drawImage(sprite, b.x*W - r, b.y*H - r*0.55, r*2, r*1.1);
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+function setFog(f){
+  fogTarget = f;
+  root.style.setProperty("--fog", f.toFixed(3));
+  document.getElementById("visVal").textContent = fmtMiles(miles(f)) + " mi";
+  const c = document.getElementById("wxCode"); c.textContent = wxCode(f); c.title = wxTitle(f);
+}
+
+/* ---------- quiz state ---------- */
+let step = -1;                       // -1 intro, 0..9 questions, 10 results
+let answers = Array(10).fill(null);  // index into ANSWERS
+const card = document.getElementById("card");
+const total = () => answers.reduce((s,a) => s + (a == null ? 0 : ANSWERS[a].score), 0);
+
+function runningFog(){
+  const done = answers.filter(a => a != null);
+  if (!done.length) return 0.64;
+  const avg = done.reduce((s,a) => s + ANSWERS[a].score, 0) / done.length;
+  const w = 0.65 + 0.35 * done.length / 10;
+  return 0.64 * (1 - w) + fogFor(avg * 10) * w;
+}
+
+function render(){
+  card.innerHTML = step < 0 ? intro() : step < 10 ? question(step) : results();
+  const s = card.querySelector(".screen"); if (s && !reduce) s.classList.add("enter");
+  bind();
+  if (step < 10) setFog(runningFog()); else setFog(fogFor(total()));
+}
+
+function partner(){
+  if (!CONFIG.clientLogo) return "";
+  return `<div class="partner"><span class="chip"><img src="${CONFIG.clientLogo}" alt="${CONFIG.clientName}"></span><span class="muted">Prepared for<br>${CONFIG.clientName}</span></div>`;
+}
+
+function intro(){
+  return `<div class="screen">
+    <p class="eyebrow">A ten-practice self-check</p>
+    <h1>How clear is <em>your</em> view?</h1>
+    <p class="lede">Leading through uncertainty comes down to a handful of habits. For each of the ten practices below, tell us when you last did it. The fog will respond to your answers.</p>
+    <div class="strip" aria-hidden="true">${PRACTICES.map(p => `<span title="${p.plain || p.concept}">${ICONS[p.icon]}</span>`).join("")}</div>
+    <div class="row"><button class="btn" id="start">Start the checklist <span aria-hidden="true">→</span></button><span class="muted">About 2 minutes. Nothing is saved or sent.</span></div>
+    ${partner()}
+  </div>`;
+}
+
+function progress(i){
+  return `<nav class="progress" aria-label="Questions">${PRACTICES.map((p,k) => {
+    const cls = k === i ? "current" : answers[k] != null ? "done" : "";
+    const can = answers[k] != null || k === i || (k > 0 && answers[k-1] != null);
+    return `<button class="${cls}" data-go="${k}" ${can ? "" : "disabled"} aria-label="Practice ${k+1}: ${p.plain || p.concept}" ${k===i ? 'aria-current="step"' : ""}>${ICONS[p.icon]}</button>`;
+  }).join("")}</nav>`;
+}
+
+function question(i){
+  const p = PRACTICES[i];
+  return `<div class="screen">
+    ${progress(i)}
+    <div class="concept-head">
+      <span class="concept-icon">${ICONS[p.icon]}</span>
+      <div><p class="eyebrow">Practice ${i+1} of 10</p><h2>${p.concept}</h2></div>
+    </div>
+    <p class="question">When was the last time you <strong>${p.ask}</strong>?</p>
+    <div class="answers" role="group" aria-label="When did you last do this?">
+      ${ANSWERS.map((a,k) => `<button class="answer" data-a="${k}" aria-pressed="${answers[i] === k}">
+        <span class="key" aria-hidden="true">${k+1}</span><span class="label">${a.label}</span>
+        <span class="meter" aria-hidden="true">${[1,2,3,4].map(n => `<i class="${n <= a.score ? "on" : ""}"></i>`).join("")}</span></button>`).join("")}
+    </div>
+    <div class="qnav"><button class="link" id="back">← ${i === 0 ? "Introduction" : "Back"}</button><span class="hint">Press 1–5 to answer</span></div>
+  </div>`;
+}
+
+function itemRow(p,k,low){
+  const a = ANSWERS[answers[k]];
+  return `<div class="item ${low ? "low" : ""}">${ICONS[p.icon]}
+    <div><div class="t">${p.concept}</div><div class="s">${cap(p.practice)}: ${a.label.toLowerCase()}</div></div>
+    <span class="meter" role="img" aria-label="${a.score} of 4">${[1,2,3,4].map(n => `<i class="${n <= a.score ? "on" : ""}"></i>`).join("")}</span></div>`;
+}
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+function picks(){
+  const ranked = PRACTICES.map((p,k) => ({p,k,s:ANSWERS[answers[k]].score}));
+  const lowSorted = [...ranked].sort((a,b) => a.s - b.s || a.k - b.k);
+  let lingering = lowSorted.filter(x => x.s <= 2).slice(0,3);
+  if (!lingering.length) lingering = lowSorted.filter(x => x.s < 4).slice(0,2);
+  const clear = [...ranked].sort((a,b) => b.s - a.s || a.k - b.k).filter(x => x.s >= 3 && !lingering.includes(x)).slice(0,2);
+  return { lingering, clear };
+}
+
+function results(){
+  const t = total(), L = levelFor(t), f = fogFor(t), { lingering, clear } = picks();
+  const lowSet = new Set(lingering.map(x => x.k));
+  return `<div class="screen">
+    <p class="eyebrow">Your Leading Through the Fog Checklist</p>
+    <h1>${L.title}</h1>
+    <div class="score-line"><span>Score <b>${t} / 40</b></span><span>Visibility <b>${fmtMiles(miles(f))} mi</b></span><span>Conditions <b>${wxTitle(f)}</b></span></div>
+    <p class="lede">${L.msg}</p>
+
+    ${lingering.length ? `<div class="section">
+      <h3>Where the fog lingers</h3>
+      ${lingering.map(({p,k}) => `<div class="nudge"><span class="ic">${ICONS[p.icon]}</span><div>
+        <h4>${p.concept}</h4><p class="when">You last ${p.practice}: ${ANSWERS[answers[k]].label.toLowerCase()}.</p>
+        <p class="try"><b>Try this:</b> ${p.nudge}</p></div></div>`).join("")}
+    </div>` : `<div class="section"><h3>Clear skies</h3><p>You’ve done all ten practices within the last week. Share what’s working with your team so they can see the way too.</p></div>`}
+
+    ${clear.length ? `<div class="section">
+      <h3>Your clearest skies</h3>
+      ${clear.map(({p,k}) => `<div class="nudge good"><span class="ic">${ICONS[p.icon]}</span><div>
+        <h4>${p.concept}</h4><p class="when" style="margin:0">You ${p.practice} ${ANSWERS[answers[k]].label.toLowerCase()}. Keep it up.</p></div></div>`).join("")}
+    </div>` : ""}
+
+    <div class="section">
+      <h3>All ten practices</h3>
+      <div class="list">${PRACTICES.map((p,k) => itemRow(p,k,lowSet.has(k))).join("")}</div>
+    </div>
+
+    <div class="section">
+      <div class="row"><button class="btn" id="copy">Copy my results</button><button class="btn ghost" id="again">Take it again</button><span class="copied" id="copied" hidden>Copied</span></div>
+      <div id="fallbackWrap" hidden><p class="muted" style="margin-bottom:6px">Select and copy your results:</p><textarea class="fallback" id="fallback" readonly></textarea></div>
+      ${CONFIG.siteLive ? `<p class="foot">Learn more at <a href="${CONFIG.siteUrl}" target="_blank" rel="noopener">${CONFIG.siteUrl.replace(/^https?:\/\//,"")}</a></p>` : ""}
+      ${partner()}
+    </div>
+  </div>`;
+}
+
+function summaryText(){
+  const t = total(), L = levelFor(t), { lingering } = picks();
+  const lines = [`Leading Through the Fog Checklist: ${L.name} (${t}/40, visibility ${fmtMiles(miles(fogFor(t)))} mi)`, ""];
+  PRACTICES.forEach((p,k) => lines.push(`- ${(p.plain || p.concept)}: ${ANSWERS[answers[k]].label}`));
+  if (lingering.length){ lines.push("", "Where the fog lingers:"); lingering.forEach(({p}) => lines.push(`- ${p.plain || p.concept}. Try this: ${p.nudge}`)); }
+  if (CONFIG.siteLive) lines.push("", `Take the checklist: ${CONFIG.quizUrl}`);
+  return lines.join("\n");
+}
+
+function choose(k){
+  answers[step] = k;
+  card.querySelectorAll(".answer").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.a === k)));
+  setFog(runningFog());
+  const at = step;
+  setTimeout(() => { if (step === at){ step = Math.min(10, step + 1); render(); focusTop(); } }, reduce ? 120 : 420);
+}
+function focusTop(){ const t = card.querySelector("h1,h2"); if (t){ t.setAttribute("tabindex","-1"); t.focus({preventScroll:true}); }
+  if (innerWidth < 760 || step === 10) window.scrollTo({top:0, behavior: reduce ? "auto" : "smooth"}); }
+
+function bind(){
+  const $ = id => document.getElementById(id);
+  $("start") && ($("start").onclick = () => { step = 0; render(); focusTop(); });
+  $("back") && ($("back").onclick = () => { step -= 1; render(); focusTop(); });
+  $("again") && ($("again").onclick = () => { answers = Array(10).fill(null); step = -1; render(); focusTop(); });
+  card.querySelectorAll(".answer").forEach(b => b.onclick = () => choose(+b.dataset.a));
+  card.querySelectorAll("[data-go]").forEach(b => b.onclick = () => { step = +b.dataset.go; render(); });
+  $("copy") && ($("copy").onclick = () => {
+    const text = summaryText();
+    const show = () => { $("copied").hidden = false; setTimeout(() => $("copied").hidden = true, 2200); };
+    const fallback = () => { $("fallbackWrap").hidden = false; const ta = $("fallback"); ta.value = text; ta.focus(); ta.select(); };
+    try { navigator.clipboard.writeText(text).then(show, fallback); } catch(e){ fallback(); }
+  });
+}
+
+addEventListener("keydown", e => {
+  if (step < 0 || step > 9 || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (/^[1-5]$/.test(e.key)) { choose(+e.key - 1); }
+  else if (e.key === "ArrowLeft") { step -= 1; render(); }
+  else if (e.key === "ArrowRight" && answers[step] != null) { step += 1; render(); }
+});
+
+if (CONFIG.siteLive){ const b = document.getElementById("brand"); b.href = CONFIG.siteUrl; b.target = "_blank"; b.rel = "noopener"; }
+render();
+</script>
+</body>
+</html>
