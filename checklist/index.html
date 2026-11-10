@@ -363,7 +363,7 @@ function intro(){
     <h1>How clear is <em>your</em> view?</h1>
     <p class="lede">Leading through uncertainty comes down to a handful of habits. For each of the ten practices below, tell us when you last did it. The fog will respond to your answers.</p>
     <div class="strip" aria-hidden="true">${PRACTICES.map(p => `<span title="${p.plain || p.concept}">${ICONS[p.icon]}</span>`).join("")}</div>
-    <div class="row"><button class="btn" id="start">Start the checklist <span aria-hidden="true">→</span></button><span class="muted">About 2 minutes. Nothing is saved or sent.</span></div>
+    <div class="row"><button class="btn" id="start">Start the diagnostic <span aria-hidden="true">→</span></button><span class="muted">About 2 minutes. Nothing is saved or sent.</span></div>
     ${partner()}
   </div>`;
 }
