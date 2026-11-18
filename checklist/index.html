@@ -217,6 +217,8 @@ const CONFIG = {
   clientName: "Fitch Leadership Lab, in partnership with Tuck Executive Education",
   /* Keep false until leadingthroughthefog.com has real content: no links to the site appear while false. */
   siteLive: false,
+  /* Google Sheet tracking: paste the Apps Script web app URL here. Leave "" to send nothing. */
+  trackingUrl: "",
   siteUrl: "https://leadingthroughthefog.com",
   quizUrl: "https://fitch.leadingthroughthefog.com"
 };
@@ -363,7 +365,7 @@ function intro(){
     <h1>How clear is <em>your</em> view?</h1>
     <p class="lede">Leading through uncertainty comes down to a handful of habits. For each of the ten practices below, tell us when you last did it. The fog will respond to your answers.</p>
     <div class="strip" aria-hidden="true">${PRACTICES.map(p => `<span title="${p.plain || p.concept}">${ICONS[p.icon]}</span>`).join("")}</div>
-    <div class="row"><button class="btn" id="start">Start the diagnostic <span aria-hidden="true">→</span></button><span class="muted">About 2 minutes. Nothing is saved or sent.</span></div>
+    <div class="row"><button class="btn" id="start">Start the diagnostic <span aria-hidden="true">→</span></button><span class="muted">About 2 minutes. ${CONFIG.trackingUrl ? "Responses are anonymous." : "Nothing is saved or sent."}</span></div>
     ${partner()}
   </div>`;
 }
@@ -456,8 +458,25 @@ function summaryText(){
   return lines.join("\n");
 }
 
+/* Anonymous progress tracking: one row per run of the diagnostic, updated after each answer. */
+let sessionId = null;
+function newSession(){
+  try { sessionId = Array.from(crypto.getRandomValues(new Uint8Array(9)), b => b.toString(36).padStart(2,"0")).join("").slice(0,16); }
+  catch(e){ sessionId = (Date.now().toString(36) + Math.random().toString(36).slice(2)).slice(0,16); }
+}
+function track(){
+  if (!CONFIG.trackingUrl || !sessionId) return;
+  const answered = answers.filter(a => a != null).length, done = answered === 10;
+  const payload = { id: sessionId, answered, score: total(), result: done ? levelFor(total()).name : "", completed: done };
+  try {
+    fetch(CONFIG.trackingUrl, { method:"POST", mode:"no-cors", keepalive:true,
+      headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify(payload) }).catch(() => {});
+  } catch(e){}
+}
+
 function choose(k){
   answers[step] = k;
+  track();
   card.querySelectorAll(".answer").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.a === k)));
   setFog(runningFog());
   const at = step;
@@ -468,9 +487,9 @@ function focusTop(){ const t = card.querySelector("h1,h2"); if (t){ t.setAttribu
 
 function bind(){
   const $ = id => document.getElementById(id);
-  $("start") && ($("start").onclick = () => { step = 0; render(); focusTop(); });
+  $("start") && ($("start").onclick = () => { newSession(); track(); step = 0; render(); focusTop(); });
   $("back") && ($("back").onclick = () => { step -= 1; render(); focusTop(); });
-  $("again") && ($("again").onclick = () => { answers = Array(10).fill(null); step = -1; render(); focusTop(); });
+  $("again") && ($("again").onclick = () => { answers = Array(10).fill(null); sessionId = null; step = -1; render(); focusTop(); });
   card.querySelectorAll(".answer").forEach(b => b.onclick = () => choose(+b.dataset.a));
   card.querySelectorAll("[data-go]").forEach(b => b.onclick = () => { step = +b.dataset.go; render(); });
   $("copy") && ($("copy").onclick = () => {
